@@ -2,7 +2,6 @@ import create from "zustand";
 import axios from "axios";
 
 type Todo = {
-  userId: number;
   id: number;
   title: string;
   completed: boolean
