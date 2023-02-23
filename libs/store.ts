@@ -13,6 +13,7 @@ export type todoStore = {
   addTodo: (todo: Todo) => void;
   setSelectedTodo: (id: number) => void;
   updateTodo: (id: number, title: Todo['title']) => void;
+  updateCompletedTodo: (id: number) => void;
 }
 
 export const useStore = create<todoStore>((set, get) => ({
@@ -40,6 +41,18 @@ export const useStore = create<todoStore>((set, get) => ({
       todos: todos.filter(v=>v).map((t) => {
         if (t.id == id) {
           const newTodo = { ...t, title, isSelected: false}
+          return newTodo
+        } 
+
+        return t
+      })
+    }))
+  },
+  updateCompletedTodo: (id: number) => {
+    set(({ todos }) => ({
+      todos: todos.filter(v=>v).map((t) => {
+        if (t.id == id) {
+          const newTodo = { ...t, completed: !t.completed}
           return newTodo
         } 
 

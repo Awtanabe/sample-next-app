@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
   const store = useStore();
-  const { todos, addTodo, setSelectedTodo, updateTodo} = useStore((state) => state)
+  const { todos, addTodo, setSelectedTodo, updateTodo, updateCompletedTodo } = useStore((state) => state)
   const [ todoForm, setTodoForm ] = useState<todoStore['todos'][0] | null>()
 
   const [ title, setTitle ] = useState<string>("");
@@ -52,6 +52,7 @@ export default function Home() {
     } else {
       return <>
         <li key={todo.id}>{todo.title}</li>
+        <input type="checkbox" checked={todo.completed} onChange={() => updateCompletedTodo(todo.id)}/>
         <button onClick={() => handleSelectedTodo(todo)}>編集</button>
       </>
     }
@@ -61,10 +62,16 @@ export default function Home() {
     if (todos.length == 0) {
       return "Todoを登録してください"
     } else {
-      const newTodos = todos.filter(v => v)
+      const newTodos = todos.filter(v => v && !v.completed)
       return newTodos.map((todo) => (Todo(todo)))
     }
   }
+
+  const renderCompletTodos = () => {
+    const completeTodos = todos.filter(v => v && v.completed)
+    return completeTodos.map((todo) => (Todo(todo)))
+  }
+
   return (
     <>
     <div className={styles.main}>
@@ -79,6 +86,10 @@ export default function Home() {
 
       <ul>
         {renderTodos(todos)}
+      </ul>
+       <h3>完了</h3>
+      <ul>
+        {renderCompletTodos()}
       </ul>
     </div>
     </>
