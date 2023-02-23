@@ -9,26 +9,15 @@ const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
   const store = useStore();
-  const [todos, setTodos] = useState<todoStore['todos']>()
-  const { fetchTodos, addTodo} = useStore((state) => state)
-
-  useEffect(() => {
-    const getTodos = async ()=> {
-      const todos = await fetchTodos()
-      if (todos) {
-        setTodos(todos)
-      }
-    }
-    getTodos()
-  }, [todos])
-
+  const { todos, fetchTodos, addTodo} = useStore((state) => state)
   return (
     <>
-    <div>home</div>
-    {todos?.map((todo) => {
-      return (<li key={todo.id}>{todo.title}</li>)
-    })}
-
+    <div className={styles.main}>
+      <div>TodoApp</div>
+      {todos?.map((todo) => {
+        return (<li key={todo.id}>{todo.title}</li>)
+      })}
+    </div>
     </>
   )
 }
