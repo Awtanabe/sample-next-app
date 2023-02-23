@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
   const store = useStore();
-  const { todos, addTodo, setSelectedTodo, updateTodo, updateCompletedTodo } = useStore((state) => state)
+  const { todos, addTodo, setSelectedTodo, updateTodo, updateCompletedTodo, deleteTodo } = useStore((state) => state)
   const [ todoForm, setTodoForm ] = useState<todoStore['todos'][0] | null>()
 
   const [ title, setTitle ] = useState<string>("");
@@ -54,6 +54,7 @@ export default function Home() {
         <li key={todo.id}>{todo.title}</li>
         <input type="checkbox" checked={todo.completed} onChange={() => updateCompletedTodo(todo.id)}/>
         <button onClick={() => handleSelectedTodo(todo)}>編集</button>
+        <button onClick={() => deleteTodo(todo.id)}>削除</button>
       </>
     }
   }

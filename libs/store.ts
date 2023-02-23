@@ -14,6 +14,7 @@ export type todoStore = {
   setSelectedTodo: (id: number) => void;
   updateTodo: (id: number, title: Todo['title']) => void;
   updateCompletedTodo: (id: number) => void;
+  deleteTodo: (id: number) => void;
 }
 
 export const useStore = create<todoStore>((set, get) => ({
@@ -58,6 +59,12 @@ export const useStore = create<todoStore>((set, get) => ({
 
         return t
       })
+    }))
+  },
+  deleteTodo: (id: number) => {
+    // ({ todos }) は、const { todos } = storeなんじゃないか？
+    set(({ todos }) => ({
+      todos: todos.filter(todo => todo && todo.id != id)
     }))
   }
 }))
