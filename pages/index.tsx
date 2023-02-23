@@ -9,11 +9,13 @@ const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
   const store = useStore();
-  const { todos, addTodo} = useStore((state) => state)
+  const { todos, addTodo, setSelectedTodo, updateTodo} = useStore((state) => state)
   const [ todoForm, setTodoForm ] = useState<todoStore['todos'][0] | null>()
 
   const [ title, setTitle ] = useState<string>("");
   const [ completed, setCompleted ] = useState<boolean>(false);
+  const [ onEdit, setOnEdit ] = useState<boolean>(false)
+  const [ editedTitle, setEditedTitle ] = useState<string>("");
 
   const changeTitleHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value)
@@ -32,12 +34,35 @@ export default function Home() {
     setCompleted(false)
   }
 
+  const handleEditedTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditedTitle(e.target.value)
+  }
+
+  const handleSelectedTodo = (todo: todoStore['todos'][0]) => {
+    setSelectedTodo(todo.id)
+    setEditedTitle(todo.title)
+  }
+
+  const Todo = (todo: todoStore['todos'][0]) => {
+    if (todo.isSelected) {
+      return <>
+        <input type="text" value={editedTitle} onChange={(e) => handleEditedTodo(e)}/>
+        <input type="submit" onClick={() => updateTodo(todo.id, editedTitle)}/>
+      </>
+    } else {
+      return <>
+        <li key={todo.id}>{todo.title}</li>
+        <button onClick={() => handleSelectedTodo(todo)}>編集</button>
+      </>
+    }
+  }
+
   const renderTodos = (todos: todoStore['todos']) => {
     if (todos.length == 0) {
       return "Todoを登録してください"
     } else {
       const newTodos = todos.filter(v => v)
-      return newTodos.map((todo) => (<li key={todo.id}>{todo.title}</li>))
+      return newTodos.map((todo) => (Todo(todo)))
     }
   }
   return (
