@@ -4,10 +4,14 @@ import { Inter } from '@next/font/google'
 import styles from '@/styles/Home.module.css'
 import { useStore , todoStore} from '../libs/store';
 import { use, useEffect, useState } from 'react';
+import { useInputState } from "@mantine/hooks";
+import { TextInput, NumberInput } from "@mantine/core";
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+  const [stringValue, setStringValue] = useInputState<string>("");
+  const [numberValue, setNumberValue] = useInputState<number>(0);
   const store = useStore();
   const { todos, addTodo, setSelectedTodo, updateTodo, updateCompletedTodo, deleteTodo } = useStore((state) => state)
   const [ todoForm, setTodoForm ] = useState<todoStore['todos'][0] | null>()
@@ -76,7 +80,7 @@ export default function Home() {
   return (
     <>
     <div className={styles.main}>
-      <div>TodoApp</div>
+      <h1 className='font-bold'>TodoApp</h1>
       <form onSubmit={(e) => submitTodo(e,addTodo, todos, title, completed)}>
         <input type="text"  value={title} onChange={changeTitleHandler}/>
         <br />
@@ -92,6 +96,10 @@ export default function Home() {
       <ul>
         {renderCompletTodos()}
       </ul>
+      <div>
+      <TextInput value={stringValue} onChange={setStringValue} />
+      <NumberInput value={numberValue} onChange={setNumberValue} />
+      </div>
     </div>
     </>
   )
